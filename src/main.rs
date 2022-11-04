@@ -13,23 +13,39 @@ fn pause() {
     stdin().read(&mut [0]).unwrap();
 }
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
+fn ask_for_num (q: &str) -> u32 {
+    use std::io::{stdin,stdout,Write};
+    let mut s=String::new();
+    print!("{}: ", q);
+    let _ = stdout().flush();
+    stdin().read_line(&mut s).expect("Did not enter a correct string");
 
-    println!("{}", log_knuth(
-        &str_to_bigint(args[1].clone()),
-        &str_to_bigint(args[2].clone()),
-        args[3].parse::<u8>().unwrap() + 1,
+    s.trim().parse().unwrap()
+}
+
+fn main() {
+    let mut args: Vec<String> = env::args().collect();
+
+    args.push(String::new());
+
+    let n_a: BigUint = ask_for_num("First number").into();
+    let n_b: BigUint = ask_for_num("Second number").into();
+    let arr = ask_for_num("Number of arrows") as u8;
+
+    println!("\n--\n{}", log_knuth(
+        &n_a,
+        &n_b,
+        arr + 1,
         false
     ));
 
-    let (pr, inn) = (args[4].contains("p"), args[4].contains("i"));
+    let (pr, inn) = (args[1].contains("p"), args[1].contains("i"));
 
     println!("Print progress: {pr}\nPrint how it works: {inn}\n");
 
     pause();
 
-    println!("\nResult: {}", knuth_nat(&str_to_bigint(args[1].clone()), &str_to_bigint(args[2].clone()), args[3].parse().unwrap(), pr, inn));
+    println!("\nResult: {}", knuth_nat(&n_a, &n_b, arr, pr, inn));
 }
 
 fn knuth_nat(num_a: &BigUint, num_b: &BigUint, arrows: u8, progress: bool, inners: bool) -> BigUint {
@@ -45,7 +61,7 @@ fn log_knuth(num_a: &BigUint, num_b: &BigUint, arrows: u8, result: bool) -> Stri
     format!("{num_a} {arrs} {num_b} = {}",
         if result {
             knuth(num_a, num_b, arrows, false, false).to_string()
-        } else {String::from("To be computed...") } )
+        } else {String::new() } )
 }
 
 fn knuth(num_a: &BigUint, num_b: &BigUint, arrows: u8, progress: bool, inners: bool) -> BigUint {
