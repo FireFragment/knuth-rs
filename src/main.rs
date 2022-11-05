@@ -1,9 +1,9 @@
 use num_bigint::BigUint;
 use std::env;
 
-fn str_to_bigint(s: String) -> BigUint {
+/*fn str_to_bigint(s: String) -> BigUint {
     s.parse::<u32>().unwrap().into()
-}
+}*/
 
 fn pause() {
     use std::io::{stdin, stdout, Read, Write};
