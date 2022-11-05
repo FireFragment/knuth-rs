@@ -73,10 +73,11 @@ fn knuth(num_a: &BigUint, num_b: &BigUint, arrows: u8, progress: bool, inners: b
         num_a * num_b
     } else {
         let mut res = num_a.clone();
-        for i in num_iter::range_inclusive(BigUint::from(1u32), num_b.clone() - 1u32) {
+        let max = num_b.clone() - 1u32;
+        for i in num_iter::range_inclusive(BigUint::from(1u32), max.clone()) {
 
             if progress {
-                println!("{} {i} / {num_b}", String::from("   ").repeat((16 - arrows) as usize));
+                println!("{} {i} / {max}", String::from("   ").repeat((16 - arrows) as usize));
             }
             //println!("{} i: {i}, num_a: {num_a}, num_b: {num_b}, res: {res}", String::from("   ").repeat((4 - arrows) as usize));
             res = knuth(num_a, &res, arrows - 1, progress, inners);
