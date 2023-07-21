@@ -5,10 +5,10 @@ use std::env;
     s.parse::<u32>().unwrap().into()
 }*/
 
-fn pause() {
+fn pause(msg: String) {
     use std::io::{stdin, stdout, Read, Write};
     let mut stdout = stdout();
-    stdout.write(b"Is it OK? [press ENTER to continue]").unwrap();
+    stdout.write(msg.as_bytes()).unwrap();
     stdout.flush().unwrap();
     stdin().read(&mut [0]).unwrap();
 }
@@ -43,9 +43,18 @@ fn main() {
 
     println!("Print progress: {pr}\nPrint how it works: {inn}\n");
 
-    pause();
+    pause(String::from("Is it OK? Press [ENTER] to continue calculation..."));
 
-    println!("\nResult: {}", knuth_nat(&n_a, &n_b, arr, pr, inn));
+    let start = std::time::Instant::now();
+    let result  = knuth_nat(&n_a, &n_b, arr, pr, inn);
+    println!("Calculating...");
+
+    let duration = start.elapsed();
+
+    println!("Duration: {duration:?}");
+    pause(String::from("\nPress [ENTER] to show the result..."));
+    println!("\nResult: {result}", );
+
 }
 
 fn knuth_nat(num_a: &BigUint, num_b: &BigUint, arrows: u8, progress: bool, inners: bool) -> BigUint {
